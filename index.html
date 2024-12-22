@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Barrier-Free Kiosk Interface</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- 초기 화면 -->
+    <section class="screen start-screen active">
+      <div class="circle">
+        <p>초기 화면 이미지</p>
+      </div>
+      <p class="instruction">화면을 클릭해주세요</p>
+      <button class="next-button">다음</button>
+    </section>
+
+    <!-- 음성 안내 화면 -->
+    <section class="screen voice-guidance">
+      <div class="voice-icon"></div>
+      <p>음성 안내를 받겠습니까?</p>
+      <div class="buttons">
+        <button class="next-button">네</button>
+        <button class="next-button">아니요</button>
+      </div>
+    </section>
+
+    <!-- 음료 선택 화면 -->
+    <section class="screen drink-selection">
+      <p class="title">
+        궁금한 점은 이 버튼을 눌러 물어보세요
+        <span class="help-icon">&#9711;</span>
+      </p>
+      <div class="menu-grid">
+        <div class="menu-item">아메리카노</div>
+        <!-- Repeat menu items as needed -->
+      </div>
+      <div class="footer-buttons">
+        <button class="back-button">돌아가기</button>
+        <button class="inactive-button">직접 호출</button>
+        <button class="inactive-button">장바구니</button>
+        <button class="next-button">결제하기</button>
+      </div>
+    </section>
+
+    <!-- 세부 옵션 선택 화면 -->
+    <section class="screen options-selection">
+      <p class="title">아메리카노</p>
+      <div class="options">
+        <p>1. 온도 선택 (택 1)</p>
+        <button>뜨겁게</button>
+        <button>차갑게</button>
+        <p>2. 기타 옵션</p>
+        <label><input type="checkbox" /> 샷 추가</label>
+        <label><input type="checkbox" /> 얼음 없이</label>
+        <label><input type="checkbox" /> 시럽 추가</label>
+      </div>
+      <div class="footer-buttons">
+        <button class="back-button">돌아가기</button>
+        <button class="inactive-button">직접 호출</button>
+        <button class="inactive-button">장바구니</button>
+        <button class="next-button">결제하기</button>
+      </div>
+    </section>
+
+    <!-- 결제 방법 선택 화면 -->
+    <section class="screen payment-selection">
+      <p class="title">결제 방식을 선택해주세요</p>
+      <div class="payment-methods">
+        <button class="next-button">현금</button>
+        <button class="next-button">카드</button>
+        <button class="next-button">S 페이</button>
+        <button class="next-button">기타 결제 (기프티콘)</button>
+      </div>
+      <button class="back-button">돌아가기</button>
+    </section>
+
+    <!-- 영수증 수령 화면 -->
+    <section class="screen receipt-confirmation">
+      <p>결제가 완료되었습니다</p>
+      <p>영수증을 받으시겠습니까?</p>
+      <div class="buttons">
+        <button class="restart-button">예</button>
+        <button class="restart-button">아니요</button>
+      </div>
+    </section>
+
+    <script>
+      // JavaScript to navigate through screens
+      const screens = document.querySelectorAll(".screen");
+      let currentScreen = 0;
+
+      function showScreen(index) {
+        screens.forEach((screen, i) => {
+          screen.classList.toggle("active", i === index);
+        });
+      }
+
+      document.querySelectorAll(".next-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          currentScreen = (currentScreen + 1) % screens.length;
+          showScreen(currentScreen);
+        });
+      });
+
+      document.querySelectorAll(".back-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          currentScreen = (currentScreen - 1 + screens.length) % screens.length;
+          showScreen(currentScreen);
+        });
+      });
+
+      // Buttons with no action
+      document.querySelectorAll(".inactive-button").forEach((button) => {
+        button.addEventListener("click", (e) => {
+          e.preventDefault(); // Do nothing
+        });
+      });
+
+      // Restart to the first screen when '예' or '아니요' is clicked on the last screen
+      document.querySelectorAll(".restart-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          currentScreen = 0; // Reset to the first screen
+          showScreen(currentScreen);
+        });
+      });
+    </script>
+  </body>
+</html>
